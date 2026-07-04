@@ -1,0 +1,144 @@
+================================================================================
+AI CROP HEALTH DIAGNOSTICS & TELEMETRY SYSTEMS
+================================================================================
+
+Overview:
+---------
+This is a full-stack, state-of-the-art agricultural analysis application. 
+It combines deep-learning computer vision simulations with satellite GIS mapping 
+and microclimate weather telemetry to diagnose crop diseases, generate reports, 
+and display field-level telemetry for precision agriculture.
+
+================================================================================
+1. CORE FEATURES & FUNCTIONALITIES
+================================================================================
+
+*   AI Crop Health Analysis (Leaf Diagnostics):
+    - Users can upload or drag-and-drop leaf photos of various crops.
+    - An AI inference pipeline simulates disease classification based on a 
+      ResNet-50 v4 Convolutional Neural Network (CNN).
+    - Features confidence metrics, scientific pathogen names, disease descriptions, 
+      causes, immediate agronomic action workflows, chemical/biocontrol recommendations, 
+      watering, fertilizer, soil management, and academic literature references.
+
+*   Supported Crops and Pathogens:
+    - Tomato: Early Blight (Alternaria solani), Late Blight (Phytophthora infestans), Healthy
+    - Corn: Gray Leaf Spot (Cercospora zeae-maydis), Common Rust (Puccinia sorghi), Healthy
+    - Potato: Early Blight (Alternaria solani), Late Blight (Phytophthora infestans), Healthy
+    - Soybean: Asian Soybean Rust (Phakopsora pachyrhizi), Healthy
+
+*   Multi-Format Diagnostic Reports:
+    - PDF Report: Compiles a publication-quality PDF containing patient/farm 
+      metadata, structured treatment guides, and a custom Matplotlib bar chart 
+      representing the probability distribution of predicted classes.
+    - CSV Export: Dumps raw disease metrics, severity levels, and recommendation 
+      keys for integration with spreadsheets or farm databases.
+    - JSON Export: Serializes complete diagnostic structures for API consumption.
+
+*   Interactive GIS Spatial Telemetry (Leaflet Map):
+    - Displays farm polygon boundaries (e.g., Field A-04 for Soybean, Field B-12 for Corn, Field C-04 for Wheat).
+    - Displays Normalized Difference Vegetation Index (NDVI) levels for each field (e.g., Healthy NDVI vs. Stress levels).
+    - Map overlay layers: Toggle between Satellite view, NDVI maps, and Terrain elevation.
+    - Hotspot pins for field-level anomalies: Water Stress, Nutrient Deficiency, and Pathogen Outbreaks.
+
+*   Microclimate Weather panel:
+    - Displays ambient meteorological telemetry including Temperature, Humidity, Wind speed, 
+      Precipitation, Leaf Wetness Duration, and Solar Radiation Index.
+    - Helps estimate pathogen propagation risks (e.g., high humidity & leaf wetness increase blight/rust risk).
+
+*   Dataset Retraining Panel:
+    - Displays datasets size and validation metrics.
+    - Integrates simulated GPU retraining triggers with logs to update the CNN models.
+
+*   Historical Diagnostic Logs:
+    - A searchable records log table tracking past scans, crop types, diagnosed diseases, 
+      severity levels, confidence scores, yield impacts, and processing status.
+
+================================================================================
+2. TECHNOLOGY STACK
+================================================================================
+
+Frontend:
+---------
+*   Framework: Next.js (v16.2.10) with React (v19.2.4)
+*   Styling: Tailwind CSS (v4) & Custom Vanilla CSS themes (supports premium dark scientific mode)
+*   Animations: Framer Motion (v12.42.2)
+*   Icons: Lucide React (v1.23.0)
+*   Charting: Recharts (v3.9.1)
+*   Mapping: Leaflet (v1.9.4) & React-Dropzone for drag-and-drop operations
+
+Backend:
+--------
+*   Framework: FastAPI (v0.110+)
+*   Server: Uvicorn (v0.28+)
+*   Image Processing: Pillow (PIL v10.2+) & NumPy (v1.26+)
+*   Report Engine: ReportLab (v4.1+) & Matplotlib (v3.8+) for charting
+
+================================================================================
+3. SYSTEM ARCHITECTURE & DIRECTORY STRUCTURE
+================================================================================
+
+agri_analysis/
+├── package.json               # Frontend dependencies and run scripts
+├── tsconfig.json              # TypeScript compilation setup
+├── next.config.ts             # Next.js configurations
+├── backend/                   # FastAPI backend services
+│   ├── main.py                # Server initialization, routing & API endpoints
+│   ├── analyzer.py            # AI classification model simulator & disease database
+│   ├── report_generator.py    # PDF (ReportLab/Matplotlib), CSV, and JSON compiles
+│   └── requirements.txt       # Python package dependencies
+├── public/                    # Static assets
+│   └── samples/               # Sample synthetic leaf images generated on backend startup
+└── src/                       # Frontend application code
+    ├── app/
+    │   ├── globals.css        # Custom theme variables & Tailwind layer styling
+    │   ├── layout.tsx         # App layout wrapper
+    │   └── page.tsx           # Main workspace entry point (View Router & state)
+    ├── components/            # Reusable modular dashboard panels
+    │   ├── ai-insights.tsx    # Treatment suggestions & reference lookups
+    │   ├── analysis-result.tsx# Visualizing active diagnosis, confidence & charts
+    │   ├── data-table.tsx     # Historical diagnostics log table
+    │   ├── landing-hero.tsx   # Dashboard welcome banner
+    │   ├── leaflet-map.tsx    # Dynamic maps & telemetry overlays
+    │   ├── report-preview.tsx # Report previewer & download anchors
+    │   ├── sidebar.tsx        # Navigation sidebar controller
+    │   ├── stats-grid.tsx     # Core KPIs (Scanned leaves, high-risk flags, NDVI)
+    │   ├── topbar.tsx         # Active farm selector and theme switcher
+    │   ├── upload-zone.tsx    # Drag-and-drop Leaf Image uploader
+    │   └── weather-panel.tsx  # Environmental telemetry readouts
+    └── lib/
+        ├── mock-data.ts       # Mock datasets for historical runs, telemetry and GIS
+        ├── types.ts           # Shared TypeScript interfaces
+        └── utils.ts           # Helper functions (Tailwind-merge etc.)
+
+================================================================================
+4. GETTING STARTED & RUN PROTOCOLS
+================================================================================
+
+To run the application locally, you must launch both the frontend dev server and
+the backend FastAPI server.
+
+Step A: Backend Setup & Run
+---------------------------
+1. Navigate to the backend directory:
+   cd backend
+2. Create and activate a Python virtual environment (recommended):
+   python -m venv venv
+   .\venv\Scripts\activate   # On Windows
+3. Install dependencies:
+   pip install -r requirements.txt
+4. Run the server:
+   uvicorn main:app --reload --port 8000
+   * The backend will start on http://127.0.0.1:8000
+   * On startup, sample test leaf images will be generated in public/samples/
+
+Step B: Frontend Setup & Run
+----------------------------
+1. Navigate back to the root directory:
+   cd ..
+2. Install Node.js dependencies:
+   npm install
+3. Run the development server:
+   npm run dev
+4. Open http://localhost:3000 in your browser.
+================================================================================

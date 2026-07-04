@@ -1,0 +1,151 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-background: var(--background);
+  --color-card: var(--card);
+  --color-border: var(--border);
+  --color-text-main: var(--text-main);
+  --color-text-muted: var(--text-muted);
+  
+  --font-sans: var(--font-inter), sans-serif;
+  --font-mono: var(--font-ibm-plex-sans), monospace;
+}
+
+:root {
+  --primary: #14532D; /* Deep Forest Green */
+  --primary-hover: #166534;
+  --secondary: #16A34A; /* Emerald Green */
+  --accent: #06B6D4; /* Cyan */
+  --warning: #F59E0B; /* Amber */
+  --danger: #DC2626; /* Red */
+  --background: #F8FAFC; /* Light Gray */
+  --card: #FFFFFF; /* White */
+  --border: #CBD5E1; /* Slate Gray */
+  --text-main: #0F172A; /* Dark Slate */
+  --text-muted: #475569;
+}
+
+.dark {
+  --primary: #10B981; /* Emerald Green */
+  --primary-hover: #059669;
+  --secondary: #047857; /* Dark Emerald */
+  --accent: #22D3EE; /* Cyan/Teal */
+  --warning: #F59E0B; /* Amber */
+  --danger: #EF4444; /* Red */
+  --background: #0B0F19; /* Near Black */
+  --card: #1E293B; /* Dark Slate */
+  --border: #334155; /* Slate Gray */
+  --text-main: #F1F5F9; /* Slate Gray Light */
+  --text-muted: #94A3B8;
+}
+
+/* Custom global rules for clean laboratory layout */
+body {
+  background-color: var(--background);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Leaflet map styles */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  background: var(--background) !important;
+  font-family: var(--font-sans) !important;
+}
+
+.leaflet-bar {
+  border: 1px solid var(--border) !important;
+  box-shadow: none !important;
+  border-radius: 8px !important;
+  overflow: hidden;
+}
+
+.leaflet-bar a {
+  background-color: var(--card) !important;
+  color: var(--text-main) !important;
+  border-bottom: 1px solid var(--border) !important;
+  transition: all 0.15s ease;
+}
+
+.leaflet-bar a:hover {
+  background-color: var(--background) !important;
+  color: var(--secondary) !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: var(--card) !important;
+  color: var(--text-main) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important;
+}
+
+.leaflet-popup-tip {
+  background: var(--card) !important;
+  border: 1px solid var(--border) !important;
+}
+
+/* Custom scan line effect */
+@keyframes scan {
+  0% {
+    top: 0%;
+  }
+  50% {
+    top: 100%;
+  }
+  100% {
+    top: 0%;
+  }
+}
+
+.scan-line {
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(to right, transparent, var(--accent), transparent);
+  box-shadow: 0 0 8px var(--accent);
+  animation: scan 3s linear infinite;
+}
+
+/* Custom pulse nodes */
+@keyframes pulseGlow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+.pulse-node {
+  animation: pulseGlow 2s infinite ease-in-out;
+}
