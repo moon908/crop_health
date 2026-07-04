@@ -50,12 +50,13 @@ export default function AnalysisResult({ result: rawResult, onReset }: AnalysisR
   // Normalize result to ensure compatibility with both full AIAnalysisResult and legacy CropLeafCase structures
   const result = React.useMemo(() => {
     if (!rawResult) return rawResult;
-    if (rawResult.disease_analysis && rawResult.crop_info) {
+    const raw = rawResult as any;
+    if (raw.disease_analysis && raw.crop_info) {
       return rawResult;
     }
     
-    const diseaseName = rawResult.disease || rawResult.name || "Healthy";
-    const confidence = rawResult.confidence ?? 95;
+    const diseaseName = raw.disease || raw.name || "Healthy";
+    const confidence = raw.confidence ?? 95;
     
     const top_5_predictions = [
       { disease: diseaseName, probability: confidence },
@@ -66,31 +67,31 @@ export default function AnalysisResult({ result: rawResult, onReset }: AnalysisR
     ];
 
     let severityLevel: 'Low' | 'Medium' | 'High' | 'Critical' = 'Low';
-    const severityVal = rawResult.severity ?? 0;
+    const severityVal = raw.severity ?? 0;
     if (severityVal > 75) severityLevel = 'Critical';
     else if (severityVal > 50) severityLevel = 'High';
     else if (severityVal > 20) severityLevel = 'Medium';
 
     const defaultImage = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'><rect width='300' height='300' fill='%231e293b'/><text x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%2364748b' font-family='monospace' font-size='12'>SAMPLE LEAF IMAGE</text></svg>";
     
-    let originalImage = rawResult.original_image_base64 || defaultImage;
-    let maskImage = rawResult.mask_image_base64 || defaultImage;
-    let heatmapImage = rawResult.heatmap_image_base64 || defaultImage;
+    let originalImage = raw.original_image_base64 || defaultImage;
+    let maskImage = raw.mask_image_base64 || defaultImage;
+    let heatmapImage = raw.heatmap_image_base64 || defaultImage;
 
-    if (!rawResult.original_image_base64) {
-      if (rawResult.id === "case-corn-spot") {
+    if (!raw.original_image_base64) {
+      if (raw.id === "case-corn-spot") {
         originalImage = "/samples/corn-spot.jpg";
         maskImage = "/samples/corn-spot.jpg";
         heatmapImage = "/samples/corn-spot.jpg";
-      } else if (rawResult.id === "case-soy-rust") {
+      } else if (raw.id === "case-soy-rust") {
         originalImage = "/samples/soy-rust.jpg";
         maskImage = "/samples/soy-rust.jpg";
         heatmapImage = "/samples/soy-rust.jpg";
-      } else if (rawResult.id === "case-potato-blight") {
+      } else if (raw.id === "case-potato-blight") {
         originalImage = "/samples/potato-blight.jpg";
         maskImage = "/samples/potato-blight.jpg";
         heatmapImage = "/samples/potato-blight.jpg";
-      } else if (rawResult.id === "case-tomato-blight") {
+      } else if (raw.id === "case-tomato-blight") {
         originalImage = "/samples/tomato-blight.jpg";
         maskImage = "/samples/tomato-blight.jpg";
         heatmapImage = "/samples/tomato-blight.jpg";
@@ -98,26 +99,26 @@ export default function AnalysisResult({ result: rawResult, onReset }: AnalysisR
     }
 
     const recs = {
-      immediate_action: rawResult.recommendations?.immediate_action || rawResult.recommendations?.pesticide || "Prune infected tissue.",
-      fungicide_pesticide: rawResult.recommendations?.fungicide_pesticide || rawResult.recommendations?.pesticide || "N/A",
-      watering: rawResult.recommendations?.watering || rawResult.recommendations?.water || "Regular watering.",
-      fertilizer: rawResult.recommendations?.fertilizer || "Balanced fertilizer.",
-      soil_management: rawResult.recommendations?.soil_management || "Ensure good aeration.",
-      prevention_methods: rawResult.recommendations?.prevention_methods || (rawResult.recommendations?.preventive ? rawResult.recommendations.preventive.join(". ") : "N/A"),
-      monitoring_frequency: rawResult.recommendations?.monitoring_frequency || "Weekly scouting."
+      immediate_action: raw.recommendations?.immediate_action || raw.recommendations?.pesticide || "Prune infected tissue.",
+      fungicide_pesticide: raw.recommendations?.fungicide_pesticide || raw.recommendations?.pesticide || "N/A",
+      watering: raw.recommendations?.watering || raw.recommendations?.water || "Regular watering.",
+      fertilizer: raw.recommendations?.fertilizer || "Balanced fertilizer.",
+      soil_management: raw.recommendations?.soil_management || "Ensure good aeration.",
+      prevention_methods: raw.recommendations?.prevention_methods || (raw.recommendations?.preventive ? raw.recommendations.preventive.join(". ") : (Array.isArray(raw.recommendations?.preventive) ? raw.recommendations.preventive.join(". ") : "N/A")),
+      monitoring_frequency: raw.recommendations?.monitoring_frequency || "Weekly scouting."
     };
 
     return {
       ...rawResult,
       crop_info: {
-        crop_type: rawResult.cropType || "Unknown Crop",
+        crop_type: raw.cropType || "Unknown Crop",
         growth_stage: "Flowering Stage",
         leaf_condition: severityVal > 0 ? "Chlorotic / Necrotic Lesions" : "Healthy Canopy Structure",
         overall_health: 100 - severityVal
       },
       disease_analysis: {
         disease_detected: diseaseName.split(" (")[0],
-        scientific_name: rawResult.scientific_name || "Pathogen species",
+        scientific_name: raw.scientific_name || "Pathogen species",
         confidence_score: confidence,
         severity_level: severityLevel,
         probability: confidence,
@@ -131,15 +132,15 @@ export default function AnalysisResult({ result: rawResult, onReset }: AnalysisR
         pest_damage: 0,
         nutrient_deficiency: severityVal > 0 ? Math.round(severityVal * 0.15) : 0,
       },
-      ai_explanation: rawResult.description || "Infection detected.",
+      ai_explanation: raw.description || "Infection detected.",
       recommendations: recs,
       original_image_base64: originalImage,
       mask_image_base64: maskImage,
       heatmap_image_base64: heatmapImage,
-      bounding_boxes: rawResult.bounding_boxes || [
+      bounding_boxes: raw.bounding_boxes || [
         { x: 35, y: 35, w: 30, h: 30, label: `${diseaseName.split(" (")[0]} Area`, confidence }
       ],
-    };
+    } as AIAnalysisResult;
   }, [rawResult]);
 
   // 1. Chart Data: Top 5 predictions distribution
