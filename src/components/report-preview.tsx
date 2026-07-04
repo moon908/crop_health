@@ -50,7 +50,8 @@ export default function ReportPreview({ onShowToast, selectedScanCase }: ReportP
     onShowToast(`Requesting ${format.toUpperCase()} assembly from AI backend...`, "success");
 
     try {
-      const response = await fetch(`http://localhost:8000/api/download/${format}?id=${selectedCase.id}`);
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      const response = await fetch(`${apiBaseUrl}/api/download/${format}?id=${selectedCase.id}`);
       if (!response.ok) {
         throw new Error(`Failed to compile ${format.toUpperCase()} report.`);
       }

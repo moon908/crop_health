@@ -106,7 +106,8 @@ export default function UploadZone({ onAnalysisStart, onAnalysisComplete }: Uplo
       setErrorMsg(networkErr);
     });
 
-    xhr.open("POST", "http://localhost:8000/api/analyze");
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+    xhr.open("POST", `${apiBaseUrl}/api/analyze`);
     xhr.send(formData);
   };
 
