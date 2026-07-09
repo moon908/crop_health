@@ -16,10 +16,11 @@ import { cn } from "@/lib/utils";
 
 // Sub-component for premium animated numbers
 function AnimatedCounter({ value, decimals = 1, duration = 800 }: { value: number; decimals?: number; duration?: number }) {
-  const [displayValue, setDisplayValue] = useState(0);
+  const [displayValue, setDisplayValue] = useState(value);
+  const prevValueRef = React.useRef(value);
 
   useEffect(() => {
-    let start = 0;
+    const start = prevValueRef.current;
     const end = value;
     const startTime = performance.now();
 
@@ -37,6 +38,7 @@ function AnimatedCounter({ value, decimals = 1, duration = 800 }: { value: numbe
         requestAnimationFrame(updateNumber);
       } else {
         setDisplayValue(end);
+        prevValueRef.current = end;
       }
     };
 
@@ -168,13 +170,44 @@ function StatsCard({
 }
 
 export default function StatsGrid() {
+  const [ndvi, setNdvi] = useState(0.68);
+  const [diseasedHectares, setDiseasedHectares] = useState(12.4);
+  const [aiPredictions, setAiPredictions] = useState(142);
+  const [soilMoisture, setSoilMoisture] = useState(42.8);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setNdvi(prev => {
+        const diff = (Math.random() - 0.5) * 0.015; // small fluctuation
+        return Math.max(0.3, Math.min(0.99, Number((prev + diff).toFixed(2))));
+      });
+      setDiseasedHectares(prev => {
+        const diff = (Math.random() - 0.5) * 0.15;
+        return Math.max(0, Math.min(100, Number((prev + diff).toFixed(1))));
+      });
+      setSoilMoisture(prev => {
+        const diff = (Math.random() - 0.5) * 0.25;
+        return Math.max(10, Math.min(90, Number((prev + diff).toFixed(1))));
+      });
+      setAiPredictions(prev => {
+        // AI predictions increase by 1 roughly 15% of the time
+        if (Math.random() > 0.85) {
+          return prev + 1;
+        }
+        return prev;
+      });
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 select-none">
       <StatsCard
         title="NDVI Canopy Index"
-        value={0.68}
+        value={ndvi}
         decimals={2}
-        trend={[0.61, 0.62, 0.65, 0.63, 0.66, 0.68]}
+        trend={[0.61, 0.62, 0.65, 0.63, 0.66, ndvi]}
         trendLabel="11.4%"
         trendDirection="up"
         status="success"
@@ -182,10 +215,10 @@ export default function StatsGrid() {
       />
       <StatsCard
         title="Diseased Canopy Hectares"
-        value={12.4}
+        value={diseasedHectares}
         decimals={1}
         suffix=" ha"
-        trend={[18.5, 16.2, 14.8, 13.1, 12.8, 12.4]}
+        trend={[18.5, 16.2, 14.8, 13.1, 12.8, diseasedHectares]}
         trendLabel="32.9%"
         trendDirection="down"
         status="danger"
@@ -193,9 +226,9 @@ export default function StatsGrid() {
       />
       <StatsCard
         title="Today's AI Predictions"
-        value={142}
+        value={aiPredictions}
         decimals={0}
-        trend={[92, 105, 110, 118, 125, 142]}
+        trend={[92, 105, 110, 118, 125, aiPredictions]}
         trendLabel="13.6%"
         trendDirection="up"
         status="info"
@@ -203,10 +236,10 @@ export default function StatsGrid() {
       />
       <StatsCard
         title="Soil Moisture (VWC)"
-        value={42.8}
+        value={soilMoisture}
         decimals={1}
         suffix="%"
-        trend={[45.2, 44.8, 43.1, 41.5, 42.0, 42.8]}
+        trend={[45.2, 44.8, 43.1, 41.5, 42.0, soilMoisture]}
         trendLabel="1.9%"
         trendDirection="neutral"
         status="info"

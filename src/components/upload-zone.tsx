@@ -101,12 +101,12 @@ export default function UploadZone({ onAnalysisStart, onAnalysisComplete }: Uplo
     // Handle network errors
     xhr.addEventListener("error", () => {
       setIsUploading(false);
-      const networkErr = "Network connection failed. Please ensure the Python/FastAPI server is running on port 8000.";
+      const networkErr = "Network connection failed. Please ensure the backend server is reachable.";
       apiErrorRef.current = networkErr;
       setErrorMsg(networkErr);
     });
 
-    const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "";
     xhr.open("POST", `${apiBaseUrl}/api/analyze`);
     xhr.send(formData);
   };
