@@ -1,22 +1,25 @@
 import type { Metadata } from "next";
-import { Inter, IBM_Plex_Sans } from "next/font/google";
+import { Inter, Manrope, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
-const ibmPlexSans = IBM_Plex_Sans({
-  variable: "--font-ibm-plex-sans",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Aetheria Crop Health Intelligence Platform",
-  description: "AI-powered agricultural crop health analysis using computer vision, deep learning, and satellite intelligence.",
+  title: "AgriLens AI - Intelligent Land & Crop Analysis",
+  description: "Harness advanced AI vision to monitor crop vigor, detect stress, and optimize soil health with precision aerial data.",
 };
 
 export default function RootLayout({
@@ -25,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${ibmPlexSans.variable}`}>
+    <html lang="en" className={`${inter.variable} ${manrope.variable} ${jetbrainsMono.variable}`}>
       <head>
         <link
           rel="stylesheet"

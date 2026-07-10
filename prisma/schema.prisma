@@ -1,0 +1,23 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Analysis {
+  id             String   @id @default(uuid())
+  reportId       String   @unique
+  uploadedImage  String
+  processedImage String?
+  disease        String
+  confidence     Float
+  severity       String
+  crop           String
+  healthScore    Float
+  explanation    String?
+  recommendation String?  
+  createdAt      DateTime @default(now())
+}

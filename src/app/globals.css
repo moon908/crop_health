@@ -2,11 +2,9 @@
 
 @theme {
   --color-primary: var(--primary);
-  --color-primary-hover: var(--primary-hover);
   --color-secondary: var(--secondary);
-  --color-accent: var(--accent);
-  --color-warning: var(--warning);
-  --color-danger: var(--danger);
+  --color-tertiary: var(--tertiary);
+  --color-neutral: var(--neutral);
   --color-background: var(--background);
   --color-card: var(--card);
   --color-border: var(--border);
@@ -14,35 +12,32 @@
   --color-text-muted: var(--text-muted);
   
   --font-sans: var(--font-inter), sans-serif;
-  --font-mono: var(--font-ibm-plex-sans), monospace;
+  --font-display: var(--font-manrope), sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
 }
 
 :root {
-  --primary: #14532D; /* Deep Forest Green */
-  --primary-hover: #166534;
-  --secondary: #16A34A; /* Emerald Green */
-  --accent: #06B6D4; /* Cyan */
-  --warning: #F59E0B; /* Amber */
-  --danger: #DC2626; /* Red */
-  --background: #F8FAFC; /* Light Gray */
-  --card: #FFFFFF; /* White */
-  --border: #CBD5E1; /* Slate Gray */
-  --text-main: #0F172A; /* Dark Slate */
-  --text-muted: #475569;
+  --primary: #1B4332; /* Deep Forest Green */
+  --secondary: #2D6A4F; /* Medium Emerald Green */
+  --tertiary: #0077B6; /* Ocean Blue */
+  --neutral: #6C584C; /* Warm Earth/Taupe */
+  --background: #FDF8F5; /* Warm Beige / Off-white */
+  --card: #FFFFFF; /* White Cards */
+  --border: #E8E0D9; /* Soft Beige Border */
+  --text-main: #1A1A1A; /* Dark Text */
+  --text-muted: #5C5C5C;
 }
 
 .dark {
-  --primary: #10B981; /* Emerald Green */
-  --primary-hover: #059669;
-  --secondary: #047857; /* Dark Emerald */
-  --accent: #22D3EE; /* Cyan/Teal */
-  --warning: #F59E0B; /* Amber */
-  --danger: #EF4444; /* Red */
-  --background: #0B0F19; /* Near Black */
-  --card: #1E293B; /* Dark Slate */
-  --border: #334155; /* Slate Gray */
-  --text-main: #F1F5F9; /* Slate Gray Light */
-  --text-muted: #94A3B8;
+  --primary: #2D6A4F; 
+  --secondary: #1B4332; 
+  --tertiary: #0077B6; 
+  --neutral: #6C584C; 
+  --background: #121212; 
+  --card: #1E1E1E; 
+  --border: #333333; 
+  --text-main: #F5F5F5; 
+  --text-muted: #A0A0A0;
 }
 
 /* Custom global rules for clean laboratory layout */
